@@ -1,0 +1,34 @@
+Variable      Description
+dIn           Input data
+dataOut       Temp data storage
+dataIn        Temp data storage
+d_Out         Temp data storage
+T             Coefficient of T for DCT/IDCT (Binary representation for decimal floating value)
+T_t           Coefficient of T (Transpose form)
+DCT_out       Output for DCT/IDCT
+q_result      quantization result
+qt_50         quantization table for level 50(base 10 value)
+qtf_50        quantization table for level 50(binary form)
+RL_code       store run length code
+k             to record run length code array size
+temp_k        temp store for k
+count         use for 1s counter
+zeroCount     record number of zero
+zeroes_16     record number of 16 zeroes
+state         0->Normalize, dataIn = dIN - 128
+              1->dataOut = T*dataIn
+              2->DCT result, DCT_out = dataOut * T_t
+              3->Quantization, q_result = DCT_out * qtf_50
+              4->ZigZag ordering, dataIn = q_result
+              5->Run Length Encode, RL_code = dataIn
+              6->Reset dataIn
+              7->Run Length Decode, dataIn = RL_code
+              8->De-ZigZag ordering, q_result = dataIn
+              9->De-quantization, dataIn = q_result * qt_50
+             10->dataOut = T_t * dataIn
+             11->IDCT result, d_Out = ((DCT_out)>>32), DCT_out = dataOut * T
+             12->DeNormalize, dataIn = d_Out + 128
+        default->Only fall to this state after 12 processes finish, blinking LEDR[9]
+run           0->check for run, 1->check for symbol
+i             column
+j             row
